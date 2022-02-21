@@ -10,7 +10,16 @@ class CreateUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   execute({ email, name }: IRequest): User {
-    // Complete aqui
+    let user = this.usersRepository.findByEmail(email);
+
+    if (user) throw new Error("Bad request: invalid email");
+
+    user = this.usersRepository.create({
+      name,
+      email,
+    });
+
+    return user;
   }
 }
 

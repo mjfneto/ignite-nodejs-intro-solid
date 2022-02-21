@@ -8,8 +8,14 @@ interface IRequest {
 class TurnUserAdminUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  execute({ user_id }: IRequest): User {
-    // Complete aqui
+  execute({ user_id: id }: IRequest): User {
+    const user = this.usersRepository.findById(id);
+
+    if (!user) throw new Error("Unauthorized: not admin");
+
+    const admin = this.usersRepository.turnAdmin(user);
+
+    return admin;
   }
 }
 
