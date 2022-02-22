@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Atlas",
-        "description": "List registered user. Manage administration rights. Retrieve user profile.",
+        "description": "List registered users. Manage administration rights. Retrieve user profile.",
         "contact": {
             "name": "API Support",
             "email": "mjfneto@gmail.com"
