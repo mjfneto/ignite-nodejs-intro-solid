@@ -1,0 +1,329 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Atlas",
+        "description": "List registered user. Manage administration rights. Retrieve user profile.",
+        "contact": {
+            "name": "API Support",
+            "email": "mjfneto@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/users" : {
+            "post": {
+                "tags": ["Create user"],
+                "summary": "Creates a user under given name and email.",
+                "description": "Provided that the given email has not yet been registered, giving a name and an email (request Body/JSON) creates a user account.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "name": "Jane Doe",
+                                "email": "jane.does.the.job@email.com"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success: user created.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "create_at": {
+                                            "type": "string"
+                                        },
+                                        "updated_at": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "admin": false,
+                                    "name": "Jane Doe",
+                                    "email": "jane.does.the.job@email.com",
+                                    "created_at": "2022-02-22T01:26:01.691Z",
+                                    "updated_at": "2022-02-22T01:26:01.691Z"
+                                }
+                                
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "An user already registered under the provided email",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "error": "Bad request: invalid email"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["List users (admin)"],
+                "summary": "List users.",
+                "description": "Path /users/{userId}/admin grants admin privilege to the user registered under the provided id (request header).",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "header",
+                        "description": "Unique identification of registered user.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "allowReserved": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success: admin retrives the list of users.",
+                        "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "create_at": {
+                                            "type": "string"
+                                        },
+                                        "updated_at": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "example": [
+                                {
+                                    "admin": false,
+                                    "name": "John Doe",
+                                    "email": "john.does.the.job@email.com",
+                                    "created_at": "2022-02-22T01:26:01.691Z",
+                                    "updated_at": "2022-02-22T01:26:01.691Z"
+                                },
+                                {
+                                    "admin": true,
+                                    "name": "Jane Doe",
+                                    "email": "jane.does.the.job@email.com",
+                                    "created_at": "2022-02-22T01:26:01.691Z",
+                                    "updated_at": "2022-02-22T01:26:01.691Z"
+                                }
+                            ]
+                        }
+                                
+                        }
+                    },
+                    "400": {
+                        "description": "Unregistered/unauthorized user.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "error": "Bad request: identification"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["User profile"],
+                "summary": "Retrieve user profile.",
+                "description": "Retrieve user profile with given unique identification.",
+                "responses": {
+                    "200": {
+                        "description": "Success: user profile retrieved.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "create_at": {
+                                            "type": "string"
+                                        },
+                                        "updated_at": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "admin": false,
+                                    "name": "Jane Doe",
+                                    "email": "jane.does.the.job@email.com",
+                                    "created_at": "2022-02-22T01:26:01.691Z",
+                                    "updated_at": "2022-02-22T01:26:01.691Z"
+                                }
+                                
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invalid id or unregistered user.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "error": "Bad request: identification"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "Unique identification of registered user.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "allowReserved": true
+                    }
+                ]
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": ["Admin"],
+                "summary": "User gain admin access to the API.",
+                "description": "Admin privileges are granted to the user under given unique identification (request Header).",
+                "responses": {
+                    "200": {
+                        "description": "Success: user acquired admin privileges.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": {
+                                            "type": "boolean"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "create_at": {
+                                            "type": "string"
+                                        },
+                                        "updated_at": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "admin": true,
+                                    "name": "Jane Doe",
+                                    "email": "jane.does.the.job@email.com",
+                                    "created_at": "2022-02-22T01:26:01.691Z",
+                                    "updated_at": "2022-02-22T01:26:01.691Z"
+                                }
+                                
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "The provided identification is either or invalid or not associated with an admin.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "error": "Bad request: identification"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "Unique identification of registered user.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "allowReserved": true
+                    }
+                ]
+            }
+        }
+    }
+}
